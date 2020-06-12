@@ -92,8 +92,9 @@ void*allocate_memory(unsigned int size){
 void getMiiInfo(mii *pmii){
 	int i;
     for(i = 0;i < MII_NAME_LENGTH;i++){
-		pmii->name[i] = pmii->rawData[2 + i * 2];
+		pmii->name[i] = pmii->rawData[3 + i * 2];
 	}
+	pmii->name[10] = 0;
 	pmii->month = (pmii->rawData[0] >> 2) & 0xf;
 	pmii->day = ((pmii->rawData[0] & 3) << 3) + (pmii->rawData[1] >> 5);
 	pmii->favColor = (pmii->rawData[1] >> 1) & 0xf;
