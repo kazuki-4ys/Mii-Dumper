@@ -3,7 +3,7 @@
 
 WiiからMiiをダンプするためのツールです。Mii Extractorとは違い、SDHCや、プラスリモコンにも対応しています。
 
-吸い出したMiiは[Mii Info Editor](https://github.com/kazuki-4ys/MiiInfoEditor)や[Mii Info Editor Lite](kazuki-4ys.github.io/web_apps/MiiInfoEditorLite)などで編集でき、[Mii Importer](https://github.com/kazuki-4ys/Mii-Importer)でWiiに戻すことができます。
+吸い出したMiiは[Mii Info Editor](https://github.com/kazuki-4ys/MiiInfoEditor)や[Mii Info Editor Lite](https://kazuki-4ys.github.io/web_apps/MiiInfoEditorLite)などで編集でき、[Mii Importer](https://github.com/kazuki-4ys/Mii-Importer)でWiiに戻すことができます。
 # 使い方
 1.[ここ](https://github.com/kazuki-4ys/Mii-Dumper/releases/download/v1.0/Mii-Dumper-v1.0.zip)からMii Dumperをダウンロード、解凍し、中身をSDカードのルート(一番上の階層)にコピー。
 
