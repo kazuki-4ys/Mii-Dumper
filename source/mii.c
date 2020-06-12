@@ -5,7 +5,7 @@ int readMiis(mii*dest){
     const char DAT_MAGIC[] = "RNOD";
     //ISFSの初期化
     int ret = ISFS_Initialize();
-	int fd,fileSize,miiNum = 0;
+	int fd,fileSize,miiNum = 0,miiSlot = 0;
 	char headBuf[5] = {};
 	unsigned char *DatFileBuf; //RFL_DB.datを格納するバッファ
 	printf("[*] Initializing ISFS subsystem...");
@@ -30,9 +30,10 @@ int readMiis(mii*dest){
 				return -1;
 			}
             while(1){
-				if(miiNum >= MAX_MII_NUM - 1)break;
-			    memcpy((dest[miiNum]).rawData,DatFileBuf + 4 + miiNum * MII_FILE_SIZE,MII_FILE_SIZE);
-				if(miiRawDataCheck((dest[miiNum]).rawData) != 0)break;
+				if(miiSlot >= MAX_MII_NUM)break;
+			    memcpy((dest[miiNum]).rawData,DatFileBuf + 4 + miiSlot * MII_FILE_SIZE,MII_FILE_SIZE);
+				miiSlot++;
+				if(miiRawDataCheck((dest[miiNum]).rawData) != 0)continue;
                 miiNum++;
 			}
 			free(DatFileBuf);
@@ -75,7 +76,7 @@ int miiFileWrite(mii *Miis,int index,char *dir){
 	sprintf(path,"%s/%08d.MII",dir,index + 1);
     f = fopen(path,"wb");
 	if(!f){
-		printf("Error:fopen\n");
+		printf("\nError:fopen\n");
 		return -1;
 	}
 	fwrite((Miis[index]).rawData,sizeof(unsigned char),MII_FILE_SIZE,f);
@@ -94,7 +95,7 @@ void getMiiInfo(mii *pmii){
     for(i = 0;i < MII_NAME_LENGTH;i++){
 		pmii->name[i] = pmii->rawData[3 + i * 2];
 	}
-	pmii->name[10] = 0;
+	pmii->name[MII_NAME_LENGTH] = 0;
 	pmii->month = (pmii->rawData[0] >> 2) & 0xf;
 	pmii->day = ((pmii->rawData[0] & 3) << 3) + (pmii->rawData[1] >> 5);
 	pmii->favColor = (pmii->rawData[1] >> 1) & 0xf;
@@ -105,5 +106,40 @@ void allGetMiiInfo(mii*Miis,int num){
 	int i;
     for(i = 0;i < num;i++){
 		getMiiInfo(Miis + i);
+	}
+}
+
+void showMiiTable(int index,int max,mii*Miis){
+	char *showColor[] = {
+		"\x1b[31m    red     \x1b[39m",
+		"\x1b[33m   orange   \x1b[39m",
+		"\x1b[33m   yellow   \x1b[39m",
+		"\x1b[32myellow green\x1b[39m",
+		"\x1b[32m   green    \x1b[39m",
+		"\x1b[34m    blue    \x1b[39m",
+        "\x1b[36m    cyan    \x1b[39m",
+		"\x1b[35m    pink    \x1b[39m",
+		"\x1b[35m   purple   \x1b[39m",
+		"\x1b[37m    brown   \x1b[39m",
+		"    white   ",
+		"\x1b[7m    black   \x1b[0m",
+		"   invalid  ",
+		"   invalid  ",
+		"   invalid  ",
+		"   invalid  "
+	};
+	int page = index / SHOW_MII_NUM;
+	int curIndex,i;
+	mii* curMiiPtr;
+    for(i = 0;i < SHOW_MII_NUM;i++){
+        curIndex = i + page * SHOW_MII_NUM;
+		curMiiPtr = Miis + curIndex;
+        if(curIndex >= max)break;
+		if(curIndex == index){
+            printf("-->> ");
+		}else{
+			printf("     ");
+		}
+		printf("%3d %10s %2d/%2d %s\n",curIndex + 1,curMiiPtr->name,curMiiPtr->month,curMiiPtr->day,showColor[curMiiPtr->favColor]);
 	}
 }

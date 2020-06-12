@@ -3,6 +3,7 @@
 #define MII_FILE_SIZE 0x4A
 #define MAX_MII_NUM 100
 #define MII_NAME_LENGTH 10
+#define SHOW_MII_NUM 15
 
 #include <stdio.h>
 #include <malloc.h>
@@ -26,5 +27,6 @@ int miiFileWrite(mii*,int,char*);
 void*allocate_memory(unsigned int);
 void getMiiInfo(mii*);
 void allGetMiiInfo(mii*,int);
+void showMiiTable(int,int,mii*);
 
 #endif //_MII_H_
