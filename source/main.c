@@ -102,17 +102,6 @@ int main(int argc, char **argv) {
     if (SD_Initialize()){
 	    printf(" OK!\n");
 		sdInitialize = 1;
-		//ディレクトリが存在しなかったら作成
-		DIR*pdir = opendir(saveDir);
-		if(pdir){
-            closedir(pdir);
-		}else{
-			if(mkdir(saveDir,0777) != 0){
-                printf("Error:mkdir\n");
-				miiNum = -1;
-				goto error;
-			}
-		}
 	    }else{
             printf(" Error!\n");
 			miiNum = -1;

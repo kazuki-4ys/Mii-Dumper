@@ -9,6 +9,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 #include <gccore.h>
 #include <wiiuse/wpad.h>
 
