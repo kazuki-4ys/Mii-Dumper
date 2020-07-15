@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 	// e.g. printf ("\x1b[%d;%dH", row, column );
 	printf("\x1b[2;0H");
 	printf("+---------------------+\n");
-	printf("|   Mii Dumper v1.0   |\n");
+	printf("|  Mii Dumper v1.0.1  |\n");
     printf("| developed by Kazuki |\n");
     printf("+---------------------+\n");
 	miiNum = readMiis(Miis);

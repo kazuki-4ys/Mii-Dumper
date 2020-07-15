@@ -100,9 +100,16 @@ void*allocate_memory(unsigned int size){
 }
 
 void getMiiInfo(mii *pmii){
-	int i;
+	int i,tmpU16;
     for(i = 0;i < MII_NAME_LENGTH;i++){
-		pmii->name[i] = pmii->rawData[3 + i * 2];
+		tmpU16 = (pmii->rawData[i * 2 + 2] << 8) + pmii->rawData[i * 2 + 3];
+		if(tmpU16 > 127){
+			pmii->name[i] = '?';
+		}else if((tmpU16 < 0x20 && tmpU16 != 0) || tmpU16 == 127){
+            pmii->name[i] = ' ';
+		}else{
+			pmii->name[i] = (char)tmpU16;
+		}
 	}
 	pmii->name[MII_NAME_LENGTH] = 0;
 	pmii->month = (pmii->rawData[0] >> 2) & 0xf;
@@ -149,6 +156,10 @@ void showMiiTable(int index,int max,mii*Miis){
 		}else{
 			printf("     ");
 		}
-		printf("%3d %10s %2d/%2d %s\n",curIndex + 1,curMiiPtr->name,curMiiPtr->month,curMiiPtr->day,showColor[curMiiPtr->favColor]);
+		if(curMiiPtr->month || curMiiPtr->day){
+		    printf("%3d %10s %2d/%2d %s\n",curIndex + 1,curMiiPtr->name,curMiiPtr->month,curMiiPtr->day,showColor[curMiiPtr->favColor]);
+		}else{
+            printf("%3d %10s --/-- %s\n",curIndex + 1,curMiiPtr->name,showColor[curMiiPtr->favColor]);
+		}
 	}
 }
