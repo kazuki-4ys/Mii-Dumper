@@ -73,15 +73,6 @@ int miiRawDataCheck(unsigned char*src){
 int miiFileWrite(mii *Miis,int index,char *dir){
 	char path[128] = {};
 	FILE *f;
-	DIR*pdir = opendir(dir);
-		if(pdir){
-            closedir(pdir);
-		}else{
-			if(mkdir(dir,0777) != 0){
-                printf("\nError:mkdir\n");
-				return -1;
-			}
-		}
 	sprintf(path,"%s/%08d.MII",dir,index + 1);
     f = fopen(path,"wb");
 	if(!f){

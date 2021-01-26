@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 	// e.g. printf ("\x1b[%d;%dH", row, column );
 	printf("\x1b[2;0H");
 	printf("+---------------------+\n");
-	printf("|  Mii Dumper v1.0.1  |\n");
+	printf("|  Mii Dumper v1.0.2  |\n");
     printf("| developed by Kazuki |\n");
     printf("+---------------------+\n");
 	miiNum = readMiis(Miis);
@@ -105,7 +105,17 @@ int main(int argc, char **argv) {
 	    }else{
             printf(" Error!\n");
 			miiNum = -1;
+			goto error;
 	    }
+	DIR*pdir = opendir(saveDir);
+	if(pdir){
+        closedir(pdir);
+	}else{
+		if(mkdir(saveDir,0777) != 0){
+			printf("Error:cannot create %s directory\n",saveDir);
+			miiNum = -1;
+		}
+	}
 	error:
 	if(miiNum > 0){
         printf("\x1b[6;0H");
