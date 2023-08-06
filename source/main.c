@@ -8,6 +8,9 @@
 #include <fat.h>
 #include "mii.h"
 
+#define FOOTER_LINE_1 "A / Dump Mii | UP DOWN LEFT RIGHT / Select Mii\n"
+#define FOOTER_LINE_2 "HOME / Exit\n"
+
 static void *xfb = NULL;
 static GXRModeObj *rmode = NULL;
 
@@ -37,8 +40,8 @@ void updateMiiList(int index,int max,mii *Miis){
         printf("                                                                      \n");
 	}
 	printf("\x1b[%d;0H",SHOW_MII_NUM + 10);
-	printf("A / Dump Mii | UP DOWN / Select Mii\n");
-	printf("HOME / Exit\n");
+	printf(FOOTER_LINE_1);
+	printf(FOOTER_LINE_2);
     return;
 }
 
@@ -93,7 +96,7 @@ int main(int argc, char **argv) {
 	// e.g. printf ("\x1b[%d;%dH", row, column );
 	printf("\x1b[2;0H");
 	printf("+---------------------+\n");
-	printf("|  Mii Dumper v1.0.2  |\n");
+	printf("|  Mii Dumper v1.0.3  |\n");
     printf("| developed by Kazuki |\n");
     printf("+---------------------+\n");
 	miiNum = readMiis(Miis);
@@ -131,8 +134,8 @@ int main(int argc, char **argv) {
 		printf("\x1b[9;0H");
 		showMiiTable(index,miiNum,Miis);
 		printf("\x1b[%d;0H",SHOW_MII_NUM + 10);
-		printf("A / Dump Mii | UP DOWN / Select Mii\n");
-		printf("HOME / Exit\n");
+		printf(FOOTER_LINE_1);
+		printf(FOOTER_LINE_2);
 	}else{
         if(miiNum == 0){
             printf("Mii is empty\n");
@@ -152,19 +155,25 @@ int main(int argc, char **argv) {
 		if ( pressed & WPAD_BUTTON_HOME )appExit();
 		if(miiNum > 0){
             if ( pressed & WPAD_BUTTON_UP ){
-                if(index > 0){
-                    index--;
-					updateMiiList(index,miiNum,Miis);
-				}
+				index--;
+				if(index < 0)index += miiNum;
+                updateMiiList(index,miiNum,Miis);
 			}else if(pressed & WPAD_BUTTON_DOWN){
-                if(index < miiNum - 1){
-                    index++;
-					updateMiiList(index,miiNum,Miis);
-				}
+                index++;
+				if(index >= miiNum)index -= miiNum;
+                updateMiiList(index,miiNum,Miis);
+			}else if(pressed & WPAD_BUTTON_LEFT){
+				index -= SHOW_MII_NUM;
+				if(index < 0)index += miiNum;
+				updateMiiList(index,miiNum,Miis);
+			}else if(pressed & WPAD_BUTTON_RIGHT){
+				index += SHOW_MII_NUM;
+				if(index >= miiNum)index -= miiNum;
+				updateMiiList(index,miiNum,Miis);
 			}else if(pressed & WPAD_BUTTON_A){
                 printf("\x1b[%d;0H",SHOW_MII_NUM + 10);
 	            for(i = 0;i < 2;i++){
-                    printf("                                        \n");
+                    printf("                                              \n");
 	            }
 	            printf("\x1b[%d;0H",SHOW_MII_NUM + 10);
 				printf("Dumping Mii...");
