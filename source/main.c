@@ -163,15 +163,23 @@ int main(int argc, char **argv) {
 				if(index >= miiNum)index -= miiNum;
                 updateMiiList(index,miiNum,Miis);
 			}else if(pressed & WPAD_BUTTON_LEFT){
-				if(miiNum >= SHOW_MII_NUM){
-					index -= SHOW_MII_NUM;
-					if(index < 0)index += miiNum;
+				if(miiNum > SHOW_MII_NUM){
+					if(index == 0){
+						index = miiNum - 1;
+					}else{
+						index -= SHOW_MII_NUM;
+						if(index < 0)index = 0;
+					}
 					updateMiiList(index,miiNum,Miis);
 				}
 			}else if(pressed & WPAD_BUTTON_RIGHT){
-				if(miiNum >= SHOW_MII_NUM){
-					index += SHOW_MII_NUM;
-					if(index >= miiNum)index -= miiNum;
+				if(miiNum > SHOW_MII_NUM){
+					if(index == (miiNum - 1)){
+						index = 0;
+					}else{
+						index += SHOW_MII_NUM;
+						if(index >= miiNum)index = miiNum - 1;
+					}
 					updateMiiList(index,miiNum,Miis);
 				}
 			}else if(pressed & WPAD_BUTTON_A){
