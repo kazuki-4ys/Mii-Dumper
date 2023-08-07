@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 	// e.g. printf ("\x1b[%d;%dH", row, column );
 	printf("\x1b[2;0H");
 	printf("+---------------------+\n");
-	printf("|  Mii Dumper v1.0.3  |\n");
+	printf("|  Mii Dumper v1.0.4  |\n");
     printf("| developed by Kazuki |\n");
     printf("+---------------------+\n");
 	miiNum = readMiis(Miis);
@@ -163,13 +163,17 @@ int main(int argc, char **argv) {
 				if(index >= miiNum)index -= miiNum;
                 updateMiiList(index,miiNum,Miis);
 			}else if(pressed & WPAD_BUTTON_LEFT){
-				index -= SHOW_MII_NUM;
-				if(index < 0)index += miiNum;
-				updateMiiList(index,miiNum,Miis);
+				if(miiNum >= SHOW_MII_NUM){
+					index -= SHOW_MII_NUM;
+					if(index < 0)index += miiNum;
+					updateMiiList(index,miiNum,Miis);
+				}
 			}else if(pressed & WPAD_BUTTON_RIGHT){
-				index += SHOW_MII_NUM;
-				if(index >= miiNum)index -= miiNum;
-				updateMiiList(index,miiNum,Miis);
+				if(miiNum >= SHOW_MII_NUM){
+					index += SHOW_MII_NUM;
+					if(index >= miiNum)index -= miiNum;
+					updateMiiList(index,miiNum,Miis);
+				}
 			}else if(pressed & WPAD_BUTTON_A){
                 printf("\x1b[%d;0H",SHOW_MII_NUM + 10);
 	            for(i = 0;i < 2;i++){
